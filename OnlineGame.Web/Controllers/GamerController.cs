@@ -276,6 +276,30 @@ namespace OnlineGame.Web.Controllers
             return RedirectToAction("Index2");
         }
 
+        //ADO.Net
+        //There is a security hole if Deleting database records by GET request
+        //E.g.
+        //It is wrong
+        //when search engines issue a GET request to index the page,
+        //that GET request also delete the data.
+        //GET request should not change the state or have any side-effects.
+        public ActionResult Delete2(int id)
+        {
+            GamerBusinessLayer gamerBusinessLayer =
+                new GamerBusinessLayer();
+            gamerBusinessLayer.DeleteGamer(id);
+            return RedirectToAction("Index2");
+        }
+        //ADO.Net
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            GamerBusinessLayer gamerBusinessLayer =
+                new GamerBusinessLayer();
+            gamerBusinessLayer.DeleteGamer(id);
+            return RedirectToAction("Index2");
+        }
+
     }
 }
 /*

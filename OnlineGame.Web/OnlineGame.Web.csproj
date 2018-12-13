@@ -52,6 +52,8 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -97,7 +99,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <EntityDeploy Include="Models\OnlineGameDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OnlineGameDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\OnlineGameDataModel.edmx.diagram">
+      <DependentUpon>OnlineGameDataModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Models\OnlineGameDataModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OnlineGameDataModel.edmx</DependentUpon>
+      <LastGenOutput>OnlineGameDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\OnlineGameDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>OnlineGameDataModel.edmx</DependentUpon>
+      <LastGenOutput>OnlineGameDataModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -110,14 +129,81 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GamerController.cs" />
+    <Compile Include="Controllers\GamersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Data\OnlineGameContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Gamer.cs" />
-    <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\Area.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gamer.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gamer1.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gamer2.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GamerDetail.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GamerSkill.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gamers\Gamer.cs" />
+    <Compile Include="Models\Gamers\GamerMetaData.cs" />
+    <Compile Include="Models\Magic.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MultipleSelect.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OnlineGameDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OnlineGameDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OnlineGameDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OnlineGameDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OnlineGameDataModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SingleSelect.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Skill.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spGetGamers_Result.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spMagicNotAssignToTheGamer_Result.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSelectGamersAndTeams_Result.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSelectGamers_Result.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\spSkillsNotAssignToTheGamer_Result.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Team.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Teams\Team.cs" />
+    <Compile Include="Models\Teams\TeamMetaData.cs" />
+    <Compile Include="Models\Teams\TeamTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +217,12 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Gamer\Create.cshtml" />
     <Content Include="Views\Gamer\Edit.cshtml" />
+    <Content Include="Views\Gamers\Create.cshtml" />
+    <Content Include="Views\Gamers\Delete.cshtml" />
+    <Content Include="Views\Gamers\Details.cshtml" />
+    <Content Include="Views\Gamers\Edit.cshtml" />
+    <Content Include="Views\Gamers\Index.cshtml" />
+    <Content Include="Views\Gamers\GamersByTeam.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -146,6 +238,9 @@
       <Project>{96ebddb4-4776-4532-ba15-c0f9a693b5ef}</Project>
       <Name>BusinessLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

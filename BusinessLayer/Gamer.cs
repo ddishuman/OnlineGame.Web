@@ -6,7 +6,7 @@ namespace BusinessLayer
     public class Gamer : IGamer
     {
         public int Id { get; set; }
-        [Required]
+        //[Required]
         public string Name { get; set; }
         [Required]
         public string Gender { get; set; }

@@ -10,17 +10,11 @@
 namespace OnlineGame.Web.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Gamer
+    public partial class spMagicNotAssignToTheGamer_Result
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Gender { get; set; }
-        public string City { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public Nullable<int> TeamId { get; set; }
-    
-        public virtual Team Team { get; set; }
+        public Nullable<int> GamerId { get; set; }
+        public int MagicId { get; set; }
+        public string MagicName { get; set; }
     }
 }

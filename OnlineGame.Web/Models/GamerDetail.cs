@@ -12,15 +12,13 @@ namespace OnlineGame.Web.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Gamer
+    public partial class GamerDetail
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Gender { get; set; }
-        public string City { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public Nullable<int> TeamId { get; set; }
+        public int Experience { get; set; }
+        public int Level { get; set; }
+        public decimal GameMoney { get; set; }
     
-        public virtual Team Team { get; set; }
+        public virtual Gamer2 Gamer2 { get; set; }
     }
 }

@@ -12,21 +12,18 @@ namespace OnlineGame.Web.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Team
+    public partial class Skill
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Team()
+        public Skill()
         {
-            this.Gamers = new HashSet<Gamer>();
-            this.Gamer2 = new HashSet<Gamer2>();
+            this.GamerSkills = new HashSet<GamerSkill>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Gamer> Gamers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Gamer2> Gamer2 { get; set; }
+        public virtual ICollection<GamerSkill> GamerSkills { get; set; }
     }
 }

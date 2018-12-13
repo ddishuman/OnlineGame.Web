@@ -130,5 +130,24 @@ namespace BusinessLayer
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public void DeleteGamer(int id)
+        {
+            string connectionString =
+                    ConfigurationManager.ConnectionStrings["OnlineGameContext"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("spDeleteGamer", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter sqlParamId = new SqlParameter
+                {
+                    ParameterName = "@Id",
+                    Value = id
+                };
+                cmd.Parameters.Add(sqlParamId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }
