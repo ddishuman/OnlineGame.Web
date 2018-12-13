@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineGame.Web", "OnlineGame.Web\OnlineGame.Web.csproj", "{BF67AB4D-5237-47E5-B4C1-A1D486AEE09E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{96EBDDB4-4776-4532-BA15-C0F9A693B5EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF67AB4D-5237-47E5-B4C1-A1D486AEE09E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF67AB4D-5237-47E5-B4C1-A1D486AEE09E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF67AB4D-5237-47E5-B4C1-A1D486AEE09E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF67AB4D-5237-47E5-B4C1-A1D486AEE09E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96EBDDB4-4776-4532-BA15-C0F9A693B5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96EBDDB4-4776-4532-BA15-C0F9A693B5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96EBDDB4-4776-4532-BA15-C0F9A693B5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96EBDDB4-4776-4532-BA15-C0F9A693B5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8A1F574-7A2C-4C71-8C9E-F839CBE1D92D}
+	EndGlobalSection
+EndGlobal
