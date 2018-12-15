@@ -18,7 +18,5 @@ namespace OnlineGame.Web.Models
         public int Experience { get; set; }
         public int Level { get; set; }
         public decimal GameMoney { get; set; }
-    
-        public virtual Gamer2 Gamer2 { get; set; }
     }
 }

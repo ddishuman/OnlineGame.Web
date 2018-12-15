@@ -19,7 +19,13 @@ namespace OnlineGame.Web.Models
         public string Gender { get; set; }
         public string City { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
+        public string EmailAddress { get; set; }
+        public Nullable<int> Score { get; set; }
+        public string ProfileUrl { get; set; }
+        public Nullable<int> GameMoney { get; set; }
         public Nullable<int> TeamId { get; set; }
+        public string RolePhoto { get; set; }
+        public string RolePhotoAltText { get; set; }
     
         public virtual Team Team { get; set; }
     }

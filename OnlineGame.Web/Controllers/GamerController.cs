@@ -1,383 +1,274 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
 using System.Web.Mvc;
-using BusinessLayer;
-using OnlineGame.Web.Data;
-using Gamer = OnlineGame.Web.Models.Gamer;
+using OnlineGame.Web.Models;
 namespace OnlineGame.Web.Controllers
 {
     public class GamerController : Controller
     {
-        // http://localhost/OnlineGame.Web/Gamer/Details
-        //public ActionResult Details()
-        //{
-        //    var gamer = new Gamer
-        //    {
-        //        Id = 1,
-        //        Name = "Name1",
-        //        Gender = "Male",
-        //        City = "City1"
-        //    };
-        //    return View(gamer);
-        //}
-        // http://localhost/OnlineGame.Web/Gamer/Details
-        // http://localhost/OnlineGame.Web/Gamer/Details/1
-        // http://localhost/OnlineGame.Web/Gamer/Details/2
-        // http://localhost/OnlineGame.Web/Gamer/Details/3
-        // http://localhost/OnlineGame.Web/Gamer/Details/4
-        public ActionResult Details(int id = 0)
+        private OnlineGameEntities _db = new OnlineGameEntities();
+        // GET: Gamer
+        [HttpGet]
+        public async Task<ActionResult> Index()
         {
-            var onlineGameContext = new OnlineGameContext();
-            Gamer gamer;
-            if (id == 0)
+            IQueryable<Gamer> gamers = _db.Gamers.Include(g => g.Team);
+            return View(await gamers.ToListAsync());
+        }
+        // GET: Gamer/Details/5
+        [HttpGet]
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
             {
-                gamer = new Gamer
-                {
-                    Id = 0,
-                    Name = "Name0",
-                    Gender = "NULL",
-                    City = "NULL"
-                };
-                // or you may throw exception here.
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            else
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
             {
-                gamer = onlineGameContext.Gamers.Single(p => p.Id == id);
-                //Throws exception if can not find the single entity
+                return HttpNotFound();
             }
             return View(gamer);
         }
-        public ActionResult Index(int teamId)
+
+        // GET: Gamer/DetailsTwo
+        [HttpGet]
+        public ActionResult DetailsTwo()
         {
-            //Entity Framework
-            OnlineGameContext context = new OnlineGameContext();
-            List<Gamer> gamers = context.Gamers.Where(gamer => gamer.TeamId == teamId).ToList();
-            return View(gamers);
+            BoardGame boardGame = new BoardGame();
+            return View(boardGame);
         }
-        public ActionResult Index2()
+
+        // GET: Gamer/DetailsThree/5
+        [HttpGet]
+        public async Task<ActionResult> DetailsThree(int? id)
         {
-            //Ado.Net
-            GamerBusinessLayer gamerBusinessLayer = new GamerBusinessLayer();
-            List<BusinessLayer.Gamer> gamers = gamerBusinessLayer.Gamers.ToList();
-            return View(gamers);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            GamerA gamerA = GamerToGamerA(gamer);
+            return View(gamerA);
         }
-        //[HttpGet] attribute means it only respond to the "GET" request.
+
+        [HttpGet]
+        public async Task<ActionResult> DetailsFour(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            ViewData["GamerData"] = gamer;
+            return View();
+        }
+        // GET: Gamer/Create
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name");
             return View();
         }
-
-        // 1. Retrieve form data using FormCollection
+        // POST: Gamer/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(FormCollection formCollection)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Gender,City,DateOfBirth,EmailAddress,Score,ProfileUrl,GameMoney,TeamId")] Gamer gamer)
         {
-            ////FormCollection implement C# indexer.
-            ////See each key and value of formCollection.
-            //foreach (string key in formCollection.AllKeys)
-            //{
-            //    Response.Write($"key=={key}, {formCollection[key]}, <br/>");
-            //}
-            int teamId;
-            BusinessLayer.Gamer gamer = new BusinessLayer.Gamer
+            if (ModelState.IsValid)
             {
-                Name = formCollection["Name"],
-                Gender = formCollection["Gender"],
-                City = formCollection["City"],
-                DateOfBirth = Convert.ToDateTime(formCollection["DateOfBirth"]),
-                TeamId = int.TryParse(formCollection["TeamId"], out teamId) ? teamId : 0
-            };
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.AddGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-        // 2. Retrieve form data using name attribute of input tag from cshtml
-        [HttpPost]
-        public ActionResult Create2(string name, string gender, string city, DateTime dateOfBirth, int teamId)
-        {
-            BusinessLayer.Gamer gamer = new BusinessLayer.Gamer
-            {
-                Name = name,
-                Gender = gender,
-                City = city,
-                DateOfBirth = dateOfBirth,
-                TeamId = teamId
-            };
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.AddGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-        // 3. Retrieve form data using model binding // BEST WAY!!!
-        [HttpPost]
-        public ActionResult Create3(BusinessLayer.Gamer gamer)
-        {
-            //if any of input is not valid.
-            if (!ModelState.IsValid)
-            {
-                return View("Create");
-                //Go to Create.cshtml,
-                //so users can correct their input value.
+                _db.Gamers.Add(gamer);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.AddGamer(gamer);
-            return RedirectToAction("Index2");
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamer.TeamId);
+            return View(gamer);
         }
-        // 4. Retrieve form data using model binding by UpdateModel() or TryUpdateModel()
-        [HttpPost]
-        [ActionName("Create4")]
-        public ActionResult Create_Post()
-        {
-            //if any of input is not valid.
-            if (!ModelState.IsValid)
-            {
-                return View("Create");
-                //Go to Create.cshtml,
-                //so users can correct their input value.
-            }
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            BusinessLayer.Gamer gamer = new BusinessLayer.Gamer();
-            //UpdateModel<BusinessLayer.Gamer>(gamer);
-            //UpdateModel(gamer);
-            TryUpdateModel(gamer);
-            //1.
-            // UpdateModel() and TryUpdateModel() inspects all the HttpRequest inputs
-            // such as posted Form data, QueryString,
-            // Cookies and Server variables and populate the gamer object.
-            gamerBusinessLayer.AddGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-
-        //Ado.Net
-        //[HttpGet] attribute means it only respond to the "GET" request.
+        // GET: Gamer/Edit/5
         [HttpGet]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int? id)
         {
-            GamerBusinessLayer gamerBusinessLayer = new GamerBusinessLayer();
-            BusinessLayer.Gamer gamer = gamerBusinessLayer.Gamers.Single(g => g.Id == id);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamer.TeamId);
             return View(gamer);
         }
 
-        //Ado.Net
-        //1.
-        //Edit by Model binding will open the back door for unintended update.
-        [HttpPost]
-        public ActionResult Edit(BusinessLayer.Gamer gamer)
+        // GET: Gamer/Edit/5
+        [HttpGet]
+        public async Task<ActionResult> EditTwo(int? id)
         {
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return View(gamer);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.SaveGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-        //Ado.Net
-        //2.
-        //Solved the unintended update.
-        //Edit by UpdateModel() and TryUpdateModel()
-        [HttpPost]
-        [ActionName("Edit2")]
-        public ActionResult Edit_Post(int id)
-        {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            BusinessLayer.Gamer gamer = gamerBusinessLayer.Gamers.Single(g => g.Id == id);
-            //1.
-            ////UpdateModel(gamer, new[] { "Id", "Gender", "City", "DateOfBirth", "TeamId" });
-            //The second parameter of UpdateModel() and TeyUpdateModel() is included properties.
-            //In this case, it will only update the following properties into model.
-            //"Id", "Gender", "City", "DateOfBirth", "TeamId"
-            //The Name property is not included so it will not be updated.
-            //2.
-            ////UpdateModel(gamer, null, null, new[] { "Name" });
-            //update all properties except Name property
-            UpdateModel(gamer, null, null, new[] { "Name" });
-            if (!ModelState.IsValid)
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
             {
-                return View("Edit", gamer);
+                return HttpNotFound();
             }
-            gamerBusinessLayer.SaveGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-        //Ado.Net
-        //3.
-        //Solved the unintended update.
-        //Edit by Model binding with Bind include attribute
-        [HttpPost]
-        public ActionResult Edit3([Bind(Include = "Id, Gender, City, DateOfBirth, TeamId")]BusinessLayer.Gamer gamer)
-        {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamer.Name = gamerBusinessLayer.Gamers.Single(g => g.Id == gamer.Id).Name;
-            if (!ModelState.IsValid)
-            {
-                return View("Edit", gamer);
-            }
-            gamerBusinessLayer.SaveGamer(gamer);
-            return RedirectToAction("Index2");
-        }
-        //Ado.Net
-        //4.
-        //Solved the unintended update.
-        //Edit by Model binding with Bind exclude attribute
-        [HttpPost]
-        public ActionResult Edit4([Bind(Exclude = "Name")]BusinessLayer.Gamer gamer)
-        {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamer.Name = gamerBusinessLayer.Gamers.Single(g => g.Id == gamer.Id).Name;
-            if (!ModelState.IsValid)
-            {
-                return View("Edit", gamer);
-            }
-            gamerBusinessLayer.SaveGamer(gamer);
-            return RedirectToAction("Index2");
+            GamerA gamerA = GamerToGamerA(gamer);
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamerA.TeamId);
+            return View(gamerA);
         }
 
-
-        //Ado.Net
-        //5.
-        //Solved the unintended update.
-        //Edit by UpdateModel() and TryUpdateModel() with Interface
-        [HttpPost]
-        public ActionResult Edit5(int id)
+        // GET: Gamer/Edit/5
+        [HttpGet]
+        public async Task<ActionResult> EditThree(int? id)
         {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            BusinessLayer.Gamer gamer = gamerBusinessLayer.Gamers.Single(g => g.Id == id);
-            //1.
-            ////TryUpdateModel(gamer, new[] { "Id", "Gender", "City", "DateOfBirth", "TeamId" });
-            ////UpdateModel(gamer, new[] { "Id", "Gender", "City", "DateOfBirth", "TeamId" });
-            //The second parameter of UpdateModel() and TeyUpdateModel() is included properties.
-            //In this case, it will only update the following properties into model.
-            //"Id", "Gender", "City", "DateOfBirth", "TeamId"
-            //The Name property is not included so it will not be updated.
-            //2.
-            ////TryUpdateModel(gamer, null, null, new[] { "Name" });
-            ////UpdateModel(gamer, null, null, new[] { "Name" });
-            //update all properties except Name property
-            //3.
-            ////TryUpdateModel<IGamer>(gamer);
-            ////UpdateModel<IGamer>(gamer);
-            //The UpdateModel() function will update only the properties
-            //that are present in the interface.
-            UpdateModel<IGamer>(gamer);
-            if (!ModelState.IsValid)
+            if (id == null)
             {
-                return View("Edit", gamer);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            gamerBusinessLayer.SaveGamer(gamer);
-            return RedirectToAction("Index2");
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            ViewData["GamerData"] = gamer;
+            return View();
+            //ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamer.TeamId);
+            //return View(gamer);
         }
-
-        //ADO.Net
-        //There is a security hole if Deleting database records by GET request
-        //E.g.
-        //It is wrong
-        //when search engines issue a GET request to index the page,
-        //that GET request also delete the data.
-        //GET request should not change the state or have any side-effects.
-        public ActionResult Delete2(int id)
-        {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.DeleteGamer(id);
-            return RedirectToAction("Index2");
-        }
-        //ADO.Net
+        // POST: Gamer/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Delete(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Gender,City,DateOfBirth,EmailAddress,Score,ProfileUrl,GameMoney,TeamId")] Gamer gamer)
         {
-            GamerBusinessLayer gamerBusinessLayer =
-                new GamerBusinessLayer();
-            gamerBusinessLayer.DeleteGamer(id);
-            return RedirectToAction("Index2");
+            if (ModelState.IsValid)
+            {
+                _db.Entry(gamer).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamer.TeamId);
+            return View(gamer);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> EditTwo(GamerA gamerA)
+        {
+            if (ModelState.IsValid)
+            {
+                Gamer gamer = GamerAToGamer(gamerA);
+                //Retrive data from DB
+                Gamer gamerFromDb = await _db.Gamers.SingleAsync(g => g.Id == gamerA.Id);
+                //Update all properties except Email and Score
+                gamerFromDb.Name = gamer.Name;
+                gamerFromDb.Gender = gamer.Gender;
+                gamerFromDb.City = gamer.City;
+                gamerFromDb.DateOfBirth = gamer.DateOfBirth;
+                //gamerFromDb.EmailAddress = gamer.EmailAddress;
+                //gamerFromDb.Score = gamer.Score;
+                gamerFromDb.ProfileUrl = gamer.ProfileUrl;
+                gamerFromDb.GameMoney = gamer.GameMoney;
+                gamerFromDb.TeamId = gamer.TeamId;
+                _db.Entry(gamerFromDb).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+                //return RedirectToAction("Index");
+                return RedirectToAction("DetailsThree", new { id = gamerA.Id });
+            }
+            ViewBag.TeamId = new SelectList(_db.Teams, "Id", "Name", gamerA.TeamId);
+            return View(gamerA);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditThree(int id, string name, string gender, string city, DateTime? dateOfBirth, string emailAddress, int? score, string profileUrl, int? gameMoney, int? teamId)
+        //public async Task<ActionResult> EditThree(Gamer gamer)
+        {
+            var gamerData = ViewData["GamerData"];
+            return RedirectToAction("Index");
+        }
+        // GET: Gamer/Delete/5
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(gamer);
+        }
+        // POST: Gamer/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            Gamer gamer = await _db.Gamers.FindAsync(id);
+            _db.Gamers.Remove(gamer);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        private static GamerA GamerToGamerA(Gamer gamer)
+        {
+            GamerA gamerA = new GamerA
+            {
+                Id = gamer.Id,
+                Name = gamer.Name,
+                Gender = gamer.Gender,
+                City = gamer.City,
+                DateOfBirth = gamer.DateOfBirth,
+                EmailAddress = gamer.EmailAddress,
+                Score = gamer.Score,
+                ProfileUrl = gamer.ProfileUrl,
+                GameMoney = gamer.GameMoney,
+                TeamId = gamer.TeamId
+            };
+            return gamerA;
+        }
+
+        private static Gamer GamerAToGamer(GamerA gamerA)
+        {
+            Gamer gamer = new Gamer
+            {
+                Id = gamerA.Id,
+                Name = gamerA.Name,
+                Gender = gamerA.Gender,
+                City = gamerA.City,
+                DateOfBirth = gamerA.DateOfBirth,
+                EmailAddress = gamerA.EmailAddress,
+                Score = gamerA.Score,
+                ProfileUrl = gamerA.ProfileUrl,
+                GameMoney = gamerA.GameMoney,
+                TeamId = gamerA.TeamId
+            };
+            return gamer;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
-/*
-1.
-//var onlineGameContext = new OnlineGameContext();
-//Gamer gamer = onlineGameContext.Gamers.Single(p => p.Id == id);
-When user request, EntityFramework will request the data from the database
-and sotre its data into a temp place called DBSet.
-onlineGameContext.Gamers is a DBSet which is kind of temp place to store the Gamer Table Data.
-We use LINQ to map the Gamer Table Column id to Gamer Model property, id.
-Thus, we can get the gamer entity from Gamer Table by its id.
-Then store gamer entity data into Gamer Model object.
-Thus, each Gamer Model object is a temp place to store each Gamer Table entity from the database.
-Then we pass the Gamer Model object as the ViewModel,
-Thus, the Details.cshtml view can use the values from Gamer Model object
-which is actually the temp place to store Gamer Table entity data.
--------------------------------
-2.
-//[HttpGet]
-//public ActionResult Create()
-The GET request will direct to Views/Gamer/Create.cshtml.
--------------------------------
-3.
-//[HttpPost]
------------------
-3.1.
-//[HttpPost]
-//public ActionResult Create(FormCollection formCollection)
-Retrieve form data using FormCollection.
-The key is the name attribute of input or select tag from cshtml.
------------------
-3.2.
-//[HttpPost]
-//public ActionResult Create2(string name, string gender, string city, DateTime dateOfBirth, int teamId)
-Retrieve form data using name attribute of input tag from cshtml.
-3.2.1.
-string name is from
-//<input class="form-control text-box single-line" id="Name" name="Name" type="text" value="">
-3.2.2.
-string gender is from
-//<select id="Gender" name="Gender">...</select>
-3.2.3.
-string city is from
-<input class="form-control text-box single-line" id="City" name="City" type="text" value="">
-3.2.4.
-DateTime dateOfBirth is from
-//<input class="form-control text-box single-line" data-val="true" data-val-date="The field DateOfBirth must be a date." data-val-required="The DateOfBirth field is required." id="DateOfBirth" name="DateOfBirth" type="datetime" value="">
-3.2.5.
-int teamId is from
-//<input class="form-control text-box single-line" data-val="true" data-val-number="The field TeamId must be a number." data-val-required="The TeamId field is required." id="TeamId" name="TeamId" type="number" value="">
------------------
-3.3.
-//[HttpPost]
-//public ActionResult Create3(BusinessLayer.Gamer gamer)
-If the view has a lot of input,
-then the previous two ways is not a good idea.
-It is always better to retrieve form data using model binding.
-The model of the cshtml is BusinessLayer.Gamer,
-so we can pass the model object into HttpPost action.
-The property value of model object will contain the value
-from input or select tag from cshtml based on name attribute.
------------------
-3.4.
-//[HttpPost]
-//[ActionName("Create4")]
-//public ActionResult Create_Post()
-Retrieve form data using model binding by UpdateModel() or TryUpdateModel()
-...
-//BusinessLayer.Gamer gamer = new BusinessLayer.Gamer();
-////UpdateModel<BusinessLayer.Gamer>(gamer);
-////UpdateModel(gamer);
-//TryUpdateModel(gamer);
-3.4.1.
-UpdateModel() and TryUpdateModel() inspects all the HttpRequest inputs
-such as posted Form data, QueryString,
-Cookies and Server variables and populate the gamer object.
-3.4.2.
-UpdateModel() throws an exception if validation fails.
-TryUpdateModel() will never throw an exception and
-return false if validation fails.
-*/

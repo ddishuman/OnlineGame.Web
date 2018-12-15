@@ -4,25 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="85e30780a3c44f868cde49f49aafbcc7" Name="Diagram1">
-        <EntityTypeShape EntityType="OnlineGameModel.Area" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Gamer" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Gamer2" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.GamerDetail" Width="1.5" PointX="8.25" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Gamer1" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.GamerSkill" Width="1.5" PointX="11.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Magic" Width="1.5" PointX="8.25" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.MultipleSelect" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.SingleSelect" Width="1.5" PointX="0.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Skill" Width="1.5" PointX="9" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="OnlineGameModel.Team" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
-        <AssociationConnector Association="OnlineGameModel.FK__Gamer__AreaId__3C69FB99" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineGameModel.FK__Gamer__TeamId__18EBB532" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineGameModel.FK__Gamer__TeamId__3B75D760" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineGameModel.FK__GamerDetail__Id__3F466844" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineGameModel.FK__GamerSkil__Gamer__440B1D61" ManuallyRouted="false" />
+      <Diagram DiagramId="8280740cdbaa4e56927ec48dfe00ecdf" Name="Diagram1">
+        <EntityTypeShape EntityType="OnlineGameModel.Area" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.Gamer" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.GamerDetail" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.GamerMagic" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.GamerSkill" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.Magic" Width="1.5" PointX="0.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.MultipleSelect" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.SingleSelect" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.Skill" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="OnlineGameModel.Team" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <AssociationConnector Association="OnlineGameModel.FK__Gamer__TeamId__245D67DE" ManuallyRouted="false" />
+        <AssociationConnector Association="OnlineGameModel.FK__GamerMagi__Magic__4BAC3F29" ManuallyRouted="false" />
         <AssociationConnector Association="OnlineGameModel.FK__GamerSkil__Skill__44FF419A" ManuallyRouted="false" />
-        <AssociationConnector Association="OnlineGameModel.GamerMagic" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

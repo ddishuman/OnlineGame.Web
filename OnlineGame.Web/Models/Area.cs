@@ -14,16 +14,7 @@ namespace OnlineGame.Web.Models
     
     public partial class Area
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Area()
-        {
-            this.Gamer2 = new HashSet<Gamer2>();
-        }
-    
         public int Id { get; set; }
         public string Name { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Gamer2> Gamer2 { get; set; }
     }
 }

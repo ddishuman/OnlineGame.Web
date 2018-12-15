@@ -29,9 +29,8 @@ namespace OnlineGame.Web.Models
     
         public virtual DbSet<Area> Areas { get; set; }
         public virtual DbSet<Gamer> Gamers { get; set; }
-        public virtual DbSet<Gamer2> Gamer2 { get; set; }
         public virtual DbSet<GamerDetail> GamerDetails { get; set; }
-        public virtual DbSet<Gamer1> Gamers1 { get; set; }
+        public virtual DbSet<GamerMagic> GamerMagics { get; set; }
         public virtual DbSet<GamerSkill> GamerSkills { get; set; }
         public virtual DbSet<Magic> Magics { get; set; }
         public virtual DbSet<MultipleSelect> MultipleSelects { get; set; }
@@ -39,7 +38,7 @@ namespace OnlineGame.Web.Models
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
     
-        public virtual int spAddGamer(string name, string gender, string city, Nullable<System.DateTime> dateOfBirth, Nullable<int> teamId)
+        public virtual int spAddGamer(string name, string gender, string city, Nullable<System.DateTime> dateOfBirth, string emailAddress, Nullable<int> score, string profileUrl, string rolePhoto, string rolePhotoAltText, Nullable<int> gameMoney, Nullable<int> teamId)
         {
             var nameParameter = name != null ?
                 new ObjectParameter("Name", name) :
@@ -57,11 +56,35 @@ namespace OnlineGame.Web.Models
                 new ObjectParameter("DateOfBirth", dateOfBirth) :
                 new ObjectParameter("DateOfBirth", typeof(System.DateTime));
     
+            var emailAddressParameter = emailAddress != null ?
+                new ObjectParameter("EmailAddress", emailAddress) :
+                new ObjectParameter("EmailAddress", typeof(string));
+    
+            var scoreParameter = score.HasValue ?
+                new ObjectParameter("Score", score) :
+                new ObjectParameter("Score", typeof(int));
+    
+            var profileUrlParameter = profileUrl != null ?
+                new ObjectParameter("ProfileUrl", profileUrl) :
+                new ObjectParameter("ProfileUrl", typeof(string));
+    
+            var rolePhotoParameter = rolePhoto != null ?
+                new ObjectParameter("RolePhoto", rolePhoto) :
+                new ObjectParameter("RolePhoto", typeof(string));
+    
+            var rolePhotoAltTextParameter = rolePhotoAltText != null ?
+                new ObjectParameter("RolePhotoAltText", rolePhotoAltText) :
+                new ObjectParameter("RolePhotoAltText", typeof(string));
+    
+            var gameMoneyParameter = gameMoney.HasValue ?
+                new ObjectParameter("GameMoney", gameMoney) :
+                new ObjectParameter("GameMoney", typeof(int));
+    
             var teamIdParameter = teamId.HasValue ?
                 new ObjectParameter("TeamId", teamId) :
                 new ObjectParameter("TeamId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAddGamer", nameParameter, genderParameter, cityParameter, dateOfBirthParameter, teamIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spAddGamer", nameParameter, genderParameter, cityParameter, dateOfBirthParameter, emailAddressParameter, scoreParameter, profileUrlParameter, rolePhotoParameter, rolePhotoAltTextParameter, gameMoneyParameter, teamIdParameter);
         }
     
         public virtual int spDeleteGamer(Nullable<int> id)
@@ -220,7 +243,7 @@ namespace OnlineGame.Web.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spOutputGamerCountByGender", genderParameter, gamerCount);
         }
     
-        public virtual int spSaveGamer(Nullable<int> id, string name, string gender, string city, Nullable<System.DateTime> dateOfBirth, Nullable<int> teamId)
+        public virtual int spSaveGamer(Nullable<int> id, string name, string gender, string city, Nullable<System.DateTime> dateOfBirth, string emailAddress, Nullable<int> score, string profileUrl, Nullable<int> gameMoney, Nullable<int> teamId)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
@@ -242,11 +265,27 @@ namespace OnlineGame.Web.Models
                 new ObjectParameter("DateOfBirth", dateOfBirth) :
                 new ObjectParameter("DateOfBirth", typeof(System.DateTime));
     
+            var emailAddressParameter = emailAddress != null ?
+                new ObjectParameter("EmailAddress", emailAddress) :
+                new ObjectParameter("EmailAddress", typeof(string));
+    
+            var scoreParameter = score.HasValue ?
+                new ObjectParameter("Score", score) :
+                new ObjectParameter("Score", typeof(int));
+    
+            var profileUrlParameter = profileUrl != null ?
+                new ObjectParameter("ProfileUrl", profileUrl) :
+                new ObjectParameter("ProfileUrl", typeof(string));
+    
+            var gameMoneyParameter = gameMoney.HasValue ?
+                new ObjectParameter("GameMoney", gameMoney) :
+                new ObjectParameter("GameMoney", typeof(int));
+    
             var teamIdParameter = teamId.HasValue ?
                 new ObjectParameter("TeamId", teamId) :
                 new ObjectParameter("TeamId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spSaveGamer", idParameter, nameParameter, genderParameter, cityParameter, dateOfBirthParameter, teamIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spSaveGamer", idParameter, nameParameter, genderParameter, cityParameter, dateOfBirthParameter, emailAddressParameter, scoreParameter, profileUrlParameter, gameMoneyParameter, teamIdParameter);
         }
     
         public virtual int spSearchGamerAndDetail(Nullable<int> id, string name, string email, string gender, Nullable<int> teamId, Nullable<int> areaId, Nullable<int> experienceGreaterThanOrEqual, Nullable<int> levelGreaterThanOrEqual, Nullable<decimal> gameMoneyGreaterThan)

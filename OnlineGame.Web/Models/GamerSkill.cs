@@ -18,7 +18,6 @@ namespace OnlineGame.Web.Models
         public int SkillId { get; set; }
         public System.DateTime CreatedDate { get; set; }
     
-        public virtual Gamer2 Gamer2 { get; set; }
         public virtual Skill Skill { get; set; }
     }
 }
