@@ -1,75 +1,194 @@
-﻿@model IEnumerable<OnlineGame.Web.Models.Gamer>
+﻿@using OnlineGame.Web.Models
+@using PagedList
+@using PagedList.Mvc
+@*@model IEnumerable<Gamer>*@
+@model IPagedList<Gamer>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Gamer Index";
 }
 
-<h2>Index</h2>
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#SelectAll').click(function () {
+            $("input[name='GamerIdsToDelete']").prop("checked", this.checked);
+            $("input[name='GamerIdsToDelete']").click(function () {
+                if ($("input[name='GamerIdsToDelete']").length ===
+                    $("input[name='GamerIdsToDelete']:checked").length) {
+                    $("#SelectAll").prop("checked", "checked");
+                }
+                else {
+                    $("#SelectAll").removeProp("checked");
+                }
+            });
+        });
 
+        $("input[name='GamerIdsToDelete']").click(function () {
+            if ($("input[name='GamerIdsToDelete']").length === $("input[name='GamerIdsToDelete']:checked").length) {
+                $("#SelectAll").prop("checked", "checked");
+            }
+            else {
+                $("SelectAll").removeProp("checked");
+            }
+        });
+
+        $("#btnDeleteSelected").click(function () {
+            var count = $("input[name='GamerIdsToDelete']:checked").length;
+            if (count === 0) {
+                alert("Please select items to delete.");
+                return false;
+            }
+            else {
+                return confirm(count + " row(s) will be deleted. Are you sure to continue?");
+            }
+        });
+    });
+</script>
+
+
+<h2>@ViewBag.Title</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Gender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.City)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmailAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProfileUrl)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GameMoney)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Team.Name)
-        </th>
-        <th></th>
-    </tr>
+<p>
+    @using (Html.BeginForm("Index", "Gamer", FormMethod.Get))
+    {
+        <b>Search By:</b><br />
+        @Html.RadioButton("searchBy", "Name", true) <text>Name</text>
+        @Html.RadioButton("searchBy", "Gender") <text>Gender</text><br />
+        @Html.TextBox("searchText") <br />
+        <input type="submit" value="Go" />
+    }
+</p>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Gender)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfBirth)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmailAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProfileUrl)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GameMoney)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Team.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+@using (Html.BeginForm("DeleteMultiple", "Gamer", new
+{
+    searchBy = Request.QueryString["searchBy"],
+    searchText = Request.QueryString["searchText"],
+    pageNumber = Request.QueryString["pageNumber"],
+    sortBy = Request["sortBy"]  //Request from ViewBag
+}, FormMethod.Post))
+{
+    <table class="table">
+        <tr>
+            <th>
+                <input type="checkbox" id="SelectAll" name="SelectAll" />
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Name)*@
+                @*@Html.DisplayNameFor(model => model.First().Name)*@
+                @Html.ActionLink("Name", "Index", new
+                {
+                    sortBy = ViewBag.NameSort,
+                    searchBy = Request.QueryString["searchBy"],
+                    searchText = Request.QueryString["searchText"],
+                })
+                @*<a href="/?sortBy=Name%20desc">Name</a>*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Gender)*@
+                @*@Html.DisplayNameFor(model => model.First().Gender)*@
+                @Html.ActionLink("Gender", "Index", new
+                {
+                    sortBy = ViewBag.GenderSort,
+                    searchBy = Request.QueryString["searchBy"],
+                    searchText = Request.QueryString["searchText"],
+                })
+                @*<a href="/?sortBy=Gender">Gender</a>*@
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.EmailAddress)*@
+                @Html.DisplayNameFor(model => model.First().EmailAddress)
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5">
+                    No matched records.
+                </td>
+            </tr>
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="GamerIdsToDelete" id="GamerIdsToDelete" value="@item.Id" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5">
+                <input type="submit" value="Delete Selected" 
+                       id="btnDeleteSelected" name="btnDeleteSelected"/>
+            </td>
+        </tr>
+    </table>
 }
 
-</table>
+@*@Html.PagedListPager(Model, pageNumber => Url.Action("Index",
+    new
+    {
+        //pageNumber = pageNumber,
+        pageNumber,
+        searchBy = Request.QueryString["searchBy"],
+        searchText = Request.QueryString["searchText"]
+    }))*@
+
+@*@Html.PagedListPager(Model, pageNumber => Url.Action("Index",
+    new
+    {
+        //pageNumber = pageNumber,
+        pageNumber,
+        searchBy = Request.QueryString["searchBy"],
+        searchText = Request.QueryString["searchText"]
+    }),
+    new PagedListRenderOptions{ Display = PagedListDisplayMode.IfNeeded })*@
+
+@*@Html.PagedListPager(Model, pageNumber => Url.Action("Index",
+    new
+    {
+        //pageNumber = pageNumber,
+        pageNumber,
+        searchBy = Request.QueryString["searchBy"],
+        searchText = Request.QueryString["searchText"]
+    }),
+    new PagedListRenderOptions
+    {
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayPageCountAndCurrentLocation = true
+    })*@
+
+@Html.PagedListPager(Model, pageNumber => Url.Action("Index",
+    new
+    {
+        //pageNumber = pageNumber,
+        pageNumber,
+        searchBy = Request.QueryString["searchBy"],
+        searchText = Request.QueryString["searchText"],
+        sortBy =Request["sortBy"] // request from viewbag
+    }),
+    new PagedListRenderOptions
+    {
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayPageCountAndCurrentLocation = true,
+        DisplayItemSliceAndTotal = true
+    })

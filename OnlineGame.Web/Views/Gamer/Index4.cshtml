@@ -1,0 +1,12 @@
+﻿@using OnlineGame.Web.Models
+@model Gamer
+@{
+    ViewBag.Title = "Index4";
+}
+<h2>Index4</h2>
+<h3>Html.Partial("_GamerDetails", Model)</h3>
+@Html.Partial("_GamerDetails", Model)
+<h3>{Html.RenderPartial("_GamerDetails", Model);}</h3>
+@{
+    Html.RenderPartial("_GamerDetails", Model);
+}
