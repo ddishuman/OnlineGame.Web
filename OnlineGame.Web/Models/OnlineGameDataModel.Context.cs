@@ -37,6 +37,7 @@ namespace OnlineGame.Web.Models
         public virtual DbSet<SingleSelect> SingleSelects { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<ContactComment> ContactComments { get; set; }
     
         public virtual int spAddGamer(string name, string gender, string city, Nullable<System.DateTime> dateOfBirth, string emailAddress, Nullable<int> score, string profileUrl, string rolePhoto, string rolePhotoAltText, Nullable<int> gameMoney, Nullable<int> teamId)
         {

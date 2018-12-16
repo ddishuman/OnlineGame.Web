@@ -1,0 +1,31 @@
+﻿@using OnlineGame.Web.Models
+@model IEnumerable<Gamer>
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Index2</h2>
+
+@foreach (Gamer item in Model)
+{
+    //@Html.Partial("_Gamer", item)
+    
+        Html.RenderPartial("_Gamer", item);
+    
+}
+
+@*
+    1.
+    //@Html.Partial("_Gamer", modelObj)  V.S. {  @Html.RenderPartial("_Gamer", modelObj); }
+    1.1.
+    Using Partial() only if you need to assign the output to a variable.
+    RenderPartial() writes ouput to output stream which provides better performance.
+    1.2.
+    //@Html.Partial("_Gamer", modelObj)
+    Partial return MvcHtmkString.
+    1.3.
+    //{  @Html.RenderPartial("_Gamer", modelObj); }
+    RenderPartial is a void method and writes ouput to output stream,
+    so you need { ... }
+*@

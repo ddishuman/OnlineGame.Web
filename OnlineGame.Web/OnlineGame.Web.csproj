@@ -164,6 +164,15 @@
       <DependentUpon>OnlineGameDataModel.edmx</DependentUpon>
       <LastGenOutput>OnlineGameDataModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Photos\Name01.png" />
+    <Content Include="Photos\Name02.png" />
+    <Content Include="Photos\Name03.png" />
+    <Content Include="Photos\Name04.png" />
+    <Content Include="Photos\Name05.png" />
+    <Content Include="Photos\Name06.png" />
+    <Content Include="Photos\Name07.png" />
+    <Content Include="Photos\Name08.png" />
+    <Content Include="Photos\Name09.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
@@ -182,14 +191,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ContactCommentController.cs" />
     <Compile Include="Controllers\GamerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
+    <Compile Include="CustomHtmlHelper\CustomHtmlHelper.cs" />
     <Compile Include="Data\OnlineGameContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Area.cs">
+      <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContactComment.cs">
       <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Gamer.cs">
@@ -205,6 +219,8 @@
       <DependentUpon>OnlineGameDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Gamer\BoardGame.cs" />
+    <Compile Include="Models\Gamer\ContactComment.cs" />
+    <Compile Include="Models\Gamer\ContactCommentMetaData.cs" />
     <Compile Include="Models\Gamer\Gamer.cs" />
     <Compile Include="Models\Gamer\GamerA.cs" />
     <Compile Include="Models\Gamer\GamerMetaData.cs" />
@@ -277,6 +293,16 @@
     <Content Include="Views\Shared\DisplayTemplates\UrlToNewWindow.cshtml" />
     <Content Include="Views\Gamer\DetailsFour.cshtml" />
     <Content Include="Views\Gamer\EditThree.cshtml" />
+    <Content Include="Views\Gamer\Details2.cshtml" />
+    <Content Include="Views\Gamer\Details3.cshtml" />
+    <Content Include="Views\Gamer\Details4.cshtml" />
+    <Content Include="Views\Shared\_Gamer.cshtml" />
+    <Content Include="Views\Gamer\Index2.cshtml" />
+    <Content Include="Views\ContactComment\Create.cshtml" />
+    <Content Include="Views\ContactComment\Delete.cshtml" />
+    <Content Include="Views\ContactComment\Details.cshtml" />
+    <Content Include="Views\ContactComment\Edit.cshtml" />
+    <Content Include="Views\ContactComment\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

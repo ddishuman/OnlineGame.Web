@@ -1,4 +1,5 @@
-﻿@model OnlineGame.Web.Models.Gamer
+﻿
+@model OnlineGame.Web.Models.Gamer
 
 @{
     ViewBag.Title = "Details";
@@ -51,14 +52,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Score)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Score)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.ProfileUrl)
         </dt>
 
@@ -73,7 +66,26 @@
         <dd>
             @Html.DisplayFor(model => model.GameMoney)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.RolePhoto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RolePhoto)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RolePhotoAltText)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RolePhotoAltText)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RolePhoto)
+        </dt>
+        <dd>
+            <img src="@Url.Content(Model.RolePhoto)" alt="@Model.RolePhotoAltText" /><br />
+            @Html.Image(@Url.Content(Model.RolePhoto), @Model.RolePhotoAltText) <br />
+            @Html.Raw(@Html.ImageString(@Url.Content(Model.RolePhoto), @Model.RolePhotoAltText))
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Team.Name)
         </dt>
@@ -88,6 +100,3 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-<hr />
-<h2>Html.DisplayForModel()</h2>
-@Html.DisplayForModel()

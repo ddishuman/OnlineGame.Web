@@ -12,6 +12,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="ContactComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="CommentText" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="Gamer">
           <Key>
             <PropertyRef Name="Id" />
@@ -236,6 +244,7 @@
         </Function>
         <EntityContainer Name="OnlineGameModelStoreContainer">
           <EntitySet Name="Area" EntityType="Self.Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContactComment" EntityType="Self.ContactComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Gamer" EntityType="Self.Gamer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GamerDetail" EntityType="Self.GamerDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GamerMagic" EntityType="Self.GamerMagic" Schema="dbo" store:Type="Tables" />
@@ -520,6 +529,7 @@
             <Parameter Name="Level" Mode="In" Type="Int32" />
             <Parameter Name="GameMoney" Mode="In" Type="Decimal" />
           </FunctionImport>
+          <EntitySet Name="ContactComments" EntityType="OnlineGameModel.ContactComment" />
         </EntityContainer>
         <ComplexType Name="spGetGamers_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -567,6 +577,14 @@
           <Property Type="Int32" Name="SkillId" Nullable="false" />
           <Property Type="String" Name="SkillName" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="ContactComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CommentText" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -751,6 +769,15 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="spUpdateGamerAndDetail" FunctionName="OnlineGameModel.Store.spUpdateGamerAndDetail" />
+          <EntitySetMapping Name="ContactComments">
+            <EntityTypeMapping TypeName="OnlineGameModel.ContactComment">
+              <MappingFragment StoreEntitySet="ContactComment">
+                <ScalarProperty Name="CommentText" ColumnName="CommentText" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

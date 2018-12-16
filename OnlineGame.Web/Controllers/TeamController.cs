@@ -1,17 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using OnlineGame.Web.Data;
-using OnlineGame.Web.Models;
+﻿using System.Web.Mvc;
 namespace OnlineGame.Web.Controllers
 {
     public class TeamController : Controller
     {
+        [HttpGet]
         public ActionResult Index()
         {
-            OnlineGameContext context = new OnlineGameContext();
-            List<Team> team = context.Teams.ToList();
-            return View(team);
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Index2()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Index3()
+        {
+            return View();
         }
     }
 }
