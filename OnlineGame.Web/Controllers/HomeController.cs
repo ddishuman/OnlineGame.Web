@@ -1,22 +1,30 @@
 ﻿using System.Web.Mvc;
 namespace OnlineGame.Web.Controllers
 {
+    ////[Authorize]
+    //1.
+    //[Authorize] Need authentication to access
+    //2.
+    //[Authorize] can apply to controller level.
+    [Authorize]
     public class HomeController : Controller
     {
-        [HttpGet]
-        public ActionResult Index()
+        //1.
+        ////[AllowAnonymous]
+        //If [Authorize] apply to controller level,
+        //then you need [AllowAnonymous] to apply to NonSecureIndex()
+        [HttpGet]   //Home/NonSecureIndex
+        [AllowAnonymous]
+        public ActionResult NonSecureIndex()
         {
             return View();
         }
-        [HttpGet]
-        public ActionResult Index2()
+
+        //[Authorize] //Need authentication to access
+        [HttpGet]   //Home/SecureIndex
+        public ActionResult SecureIndex()
         {
             return View();
-        }
-        [HttpGet]
-        public ActionResult Index3()
-        {
-            return View("Index3", "_Layout3");
         }
     }
 }

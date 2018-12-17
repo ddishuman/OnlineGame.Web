@@ -1,117 +1,125 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Net;
 using System.Web.Mvc;
 using OnlineGame.Web.Models;
-using PagedList;
-
 namespace OnlineGame.Web.Controllers
 {
     public class GamerController : Controller
     {
         private OnlineGameEntities db = new OnlineGameEntities();
-
+        // GET: Gamer
+        //[AcceptVerbs(HttpVerbs.Get)]
         [HttpGet]
-        public async Task<ActionResult> Index(string searchBy, string searchText, int? pageNumber, string sortBy)
+        public async Task<ActionResult> Index()
         {
-            ViewBag.NameSort = string.IsNullOrEmpty(sortBy) ? "Name desc" : "";
-            ViewBag.GenderSort = sortBy == "Gender" ? "Gender desc" : "Gender";
-
-            List<Gamer> gamers = await db.Gamers.ToListAsync();
-            if (searchBy == "Gender")
-            {
-                gamers = await db.Gamers
-                    .Where(x => x.Gender == searchText || searchText == null)
-                    .ToListAsync();
-            }
-            if (searchBy == "Name")
-            {
-                gamers = await db.Gamers
-                    .Where(x => x.Name.Contains(searchText) || searchText == null)
-                    .ToListAsync();
-            }
-
-            IOrderedEnumerable<Gamer> gamersOrderedEnumerable;
-            switch (sortBy)
-            {
-                case "Name desc":
-                    gamersOrderedEnumerable = gamers.OrderByDescending(x => x.Name);
-                    break;
-                case "Gender desc":
-                    gamersOrderedEnumerable = gamers.OrderByDescending(x => x.Gender);
-                    break;
-                case "Gender":
-                    gamersOrderedEnumerable = gamers.OrderBy(x => x.Gender);
-                    break;
-                default:
-                    gamersOrderedEnumerable = gamers.OrderBy(x => x.Name);
-                    break;
-            }
-
-
-            //IPagedList<Gamer> gamerPagedList = gamers.ToPagedList(pageNumber ?? 1, 5);
-            IPagedList<Gamer> gamerPagedList = gamersOrderedEnumerable.ToPagedList(pageNumber ?? 1, 5);
-            return View(gamerPagedList);
+            return View(await db.Gamers.ToListAsync());
         }
-
-
+        // GET: Gamer/Details/5
+        //[AcceptVerbs(HttpVerbs.Get)]
         [HttpGet]
-        public ActionResult Index2()
+        public async Task<ActionResult> Details(int? id)
         {
-            return View();
-        }
-        [HttpGet]
-        public ActionResult Index3()
-        {
-            return View();
-        }
-        [HttpGet]
-        public ActionResult Index4()
-        {
-            Gamer gamer = new Gamer
+            if (id == null)
             {
-                Id = 1,
-                Name = "Name1",
-                Gender = "Male",
-                Score = 2000
-            };
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
             return View(gamer);
         }
-        public ActionResult Details()
+        // GET: Gamer/Create
+        //[AcceptVerbs(HttpVerbs.Get)]
+        [HttpGet]
+        public ActionResult Create()
         {
-            Gamer gamer = new Gamer
-            {
-                Id = 1,
-                Name = "Name1",
-                Gender = "Male",
-                Score = 2000
-            };
-            return View("_GamerDetails", gamer);
+            return View();
         }
-        //In order to prevent layout view apply to partial view.
-        //A. Return type is PartialViewResult.
-        //B. return PartialView("_PartialViewName", ModelObject);
-        public PartialViewResult Details2()
-        {
-            Gamer gamer = new Gamer
-            {
-                Id = 1,
-                Name = "Name1",
-                Gender = "Male",
-                Score = 2000
-            };
-            return PartialView("_GamerDetails", gamer);
-        }
-
+        // POST: Gamer/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[AcceptVerbs(HttpVerbs.Post)]
         [HttpPost]
-        public async Task<ActionResult> DeleteMultiple(IEnumerable<int> GamerIdsToDelete, 
-            string searchBy, string searchText, int? pageNumber, string sortBy)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Gender,EmailAddress")] Gamer gamer)
         {
-            List<Gamer> gamers = await db.Gamers.Where(g => GamerIdsToDelete.Contains(g.Id)).ToListAsync();
-            gamers.ForEach(g => db.Gamers.Remove(g));
+            if (ModelState.IsValid)
+            {
+                db.Gamers.Add(gamer);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(gamer);
+        }
+        // GET: Gamer/Edit/5
+        //[AcceptVerbs(HttpVerbs.Get)]
+        [HttpGet]
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(gamer);
+        }
+        // POST: Gamer/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[AcceptVerbs(HttpVerbs.Post)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Gender,EmailAddress")] Gamer gamer)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(gamer).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(gamer);
+        }
+        // GET: Gamer/Delete/5
+        //[AcceptVerbs(HttpVerbs.Get)]
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Gamer gamer = await db.Gamers.FindAsync(id);
+            if (gamer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(gamer);
+        }
+        // POST: Gamer/Delete/5
+        //[AcceptVerbs(HttpVerbs.Post)]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            Gamer gamer = await db.Gamers.FindAsync(id);
+            db.Gamers.Remove(gamer);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index", new { searchBy, searchText, pageNumber, sortBy });
+            return RedirectToAction("Index");
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
