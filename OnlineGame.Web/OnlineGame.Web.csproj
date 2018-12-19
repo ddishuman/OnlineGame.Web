@@ -200,6 +200,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ContactCommentController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GamerController.cs" />
     <Compile Include="Controllers\Home2Controller.cs" />
     <Compile Include="Controllers\Home3Controller.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="Models\Teams\TeamMetaData.cs" />
     <Compile Include="Models\Teams\TeamTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebShared\CustomizeCacheAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -291,23 +293,9 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Gamer\Create.cshtml" />
-    <Content Include="Views\Gamer\Delete.cshtml" />
-    <Content Include="Views\Gamer\Details.cshtml" />
-    <Content Include="Views\Gamer\Edit.cshtml" />
-    <Content Include="Views\Gamer\Index.cshtml" />
-    <Content Include="Views\Gamer\DetailsTwo.cshtml" />
-    <Content Include="Views\Gamer\DetailsThree.cshtml" />
-    <Content Include="Views\Gamer\EditTwo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\UrlToNewWindow.cshtml" />
-    <Content Include="Views\Gamer\DetailsFour.cshtml" />
-    <Content Include="Views\Gamer\EditThree.cshtml" />
-    <Content Include="Views\Gamer\Details2.cshtml" />
-    <Content Include="Views\Gamer\Details3.cshtml" />
-    <Content Include="Views\Gamer\Details4.cshtml" />
     <Content Include="Views\Shared\_Gamer.cshtml" />
-    <Content Include="Views\Gamer\Index2.cshtml" />
     <Content Include="Views\ContactComment\Create.cshtml" />
     <Content Include="Views\ContactComment\Delete.cshtml" />
     <Content Include="Views\ContactComment\Details.cshtml" />
@@ -318,13 +306,10 @@
     <Content Include="Views\Shared\_Layout4.cshtml" />
     <Content Include="Views\Shared\_ChromeLayout.cshtml" />
     <Content Include="Views\Home\Index2.cshtml" />
-    <Content Include="Views\Gamer\Index3.cshtml" />
-    <Content Include="Views\Gamer\Index4.cshtml" />
     <Content Include="Views\Team\Index2.cshtml" />
     <Content Include="Views\Team\Index3.cshtml" />
     <Content Include="Views\Shared\_GamerDetails.cshtml" />
     <Content Include="Views\Team\_ViewStart.cshtml" />
-    <Content Include="Views\Gamer\_ViewStart.cshtml" />
     <Content Include="Views\Home\List2.cshtml" />
     <Content Include="Views\Home\Index3.cshtml" />
     <Content Include="Views\Home\NonSecureIndex.cshtml" />
@@ -333,6 +318,20 @@
     <Content Include="Views\Home2\GamersName2.cshtml" />
     <Content Include="Views\Home2\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\UnauthorizedError.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Shared\InternalServerError.cshtml" />
+    <Content Include="Views\Gamer\Create.cshtml" />
+    <Content Include="Views\Gamer\Delete.cshtml" />
+    <Content Include="Views\Gamer\Details.cshtml" />
+    <Content Include="Views\Gamer\Edit.cshtml" />
+    <Content Include="Views\Gamer\Index.cshtml" />
+    <Content Include="Views\Gamer\Index2.cshtml" />
+    <Content Include="Views\Gamer\Index3.cshtml" />
+    <Content Include="Views\Gamer\Index3V2.cshtml" />
+    <Content Include="Views\Gamer\Index4.cshtml" />
+    <Content Include="Views\Gamer\Index5.cshtml" />
+    <Content Include="Views\Gamer\Index6.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

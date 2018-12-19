@@ -412,5 +412,7 @@ namespace OnlineGame.Web.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("spUpdateGamerAndDetail", idParameter, nameParameter, genderParameter, emailParameter, birthdayParameter, teamIdParameter, areaIdParameter, experienceParameter, levelParameter, gameMoneyParameter);
         }
+
+        public System.Data.Entity.DbSet<OnlineGame.Web.Models.GamerA> GamerAs { get; set; }
     }
 }

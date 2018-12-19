@@ -6,7 +6,12 @@ namespace OnlineGame.Web.Controllers
     {
         // GET: Home3
         [HttpGet]   //Home3/Index
+        [HandleError]
         public ActionResult Index()
+        {
+            throw new Exception("Exception occurs");
+        }
+        public ActionResult Index3()
         {
             throw new Exception("Exception occurs");
         }

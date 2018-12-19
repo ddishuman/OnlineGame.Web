@@ -2,10 +2,9 @@
 @model IEnumerable<OnlineGame.Web.Models.Gamer>
 
 @{
-    ViewBag.Title = "Gamer Index3";
+    ViewBag.Title = "Gamer Index3V2";
 }
-
-<h2>Gamer Index3</h2>
+<h2>Gamer Index3V2</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -17,9 +16,6 @@
 </b>
 <p>
     Gamers retrieved At @DateTime.Now.ToString(CultureInfo.InvariantCulture)
-</p>
-<p>
-    @Html.Action("GetGamerCount")
 </p>
 <table class="table">
     <tr>
