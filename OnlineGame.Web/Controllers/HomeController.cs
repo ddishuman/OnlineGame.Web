@@ -1,30 +1,35 @@
 ﻿using System.Web.Mvc;
+//[RequireHttps] attribute will enforce to redirect to https
+//It can apply to controller level or action level
+//[RequireHttps]
 namespace OnlineGame.Web.Controllers
 {
-    ////[Authorize]
-    //1.
-    //[Authorize] Need authentication to access
-    //2.
-    //[Authorize] can apply to controller level.
-    [Authorize]
     public class HomeController : Controller
     {
-        //1.
-        ////[AllowAnonymous]
-        //If [Authorize] apply to controller level,
-        //then you need [AllowAnonymous] to apply to NonSecureIndex()
-        [HttpGet]   //Home/NonSecureIndex
-        [AllowAnonymous]
-        public ActionResult NonSecureIndex()
+        // GET: Home
+        public ActionResult Index()
         {
             return View();
         }
-
-        //[Authorize] //Need authentication to access
-        [HttpGet]   //Home/SecureIndex
-        public ActionResult SecureIndex()
+        public string Index2()
+        {
+            return "Index2 is accessible via HTTP or HTTPS";
+        }
+        public ActionResult Index3()
+        {
+            return View();
+        }
+        //[RequireHttps] attribute will enforce to redirect to https
+        [RequireHttps]
+        public string Index4()
+        {
+            return "Index4 is accessible via HTTPS";
+        }
+        [RequireHttps]
+        public ActionResult Index5()
         {
             return View();
         }
     }
 }
+

@@ -22,5 +22,12 @@ namespace OnlineGame.Web.Controllers
         {
             return View();
         }
+
+        //error statusCode="403.4"
+        [HttpGet]
+        public ActionResult RedirectToHttps()
+        {
+            return View();
+        }
     }
 }

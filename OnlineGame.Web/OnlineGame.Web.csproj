@@ -332,6 +332,8 @@
     <Content Include="Views\Gamer\Index4.cshtml" />
     <Content Include="Views\Gamer\Index5.cshtml" />
     <Content Include="Views\Gamer\Index6.cshtml" />
+    <Content Include="Views\Home\Index5.cshtml" />
+    <Content Include="Views\Shared\RedirectToHttps.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
